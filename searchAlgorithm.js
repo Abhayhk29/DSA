@@ -32,6 +32,7 @@ function binarySearch(arr,n){
     return -1;
 }
 
+// Big O = O(log(n))
 function reBinarySolution(arr,n,start, end){
    if(start > end){
      return -1;
