@@ -1,2 +1,3 @@
-# DSA
-DSA Practice
+# dsa
+DSA related question and solution 
+#Array
