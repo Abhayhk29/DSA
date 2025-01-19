@@ -17,4 +17,36 @@ function countSubset(arr, sum, i = 0){
 }
 
 
-console.log(countSubset(arr,sum));
+function countSubsetDp(arr,sum){
+    let n = arr.length;
+    let t = [];
+  for (let i = 0; i <= n + 1; i++) {
+    t[i] = [];
+    for (let j = 0; j <= sum + 1; j++) {
+      if (i == 0) {
+        t[i][j] = 0;
+      }
+      if (j == 0) {
+        t[i][j] = 1;
+      } else {
+        t[i][j] = 0;
+      }
+    }
+  }
+
+  for (let i = 1; i < n + 1; i++) {
+    for (let j = 1; j < sum + 1; j++) {
+        if(arr[i - 1] <= j){
+            t[i][j] = t[i - 1][j] + t[i - 1][j - arr[i-1]]
+        }else{
+            t[i][j] = t[i - 1][j];
+        }
+        
+    }
+    
+  }
+
+  return t[n][sum]
+}
+
+console.log(countSubsetDp(arr,sum));
