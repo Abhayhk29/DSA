@@ -65,7 +65,20 @@ promise.then(
 
 function promiseAll(PromiseArr){
     return new Promise((resolve, reject) => {
-    })
+        const datArr = new Array(PromiseArr.length);
+        let resolutionState = 'pending';
 
-             
+        for (const index in PromiseArr) {
+            PromiseArr[index].then((data) => {
+                datArr[index] = data;
+                if(datArr.filter((value) => value !== undefined).length === PromiseArr.length){
+                    resolutionState = 'fulfilled';
+                    resolve(datArr);
+                }
+            }).catch((error) => {
+                resolutionState = 'rejected';
+                reject(error);
+            })
+        }
+    })
 }

@@ -4,9 +4,9 @@ const postion = 5;
 const count = 3;
 
 arr.splice(postion, count);
-console.log(arr)
+// console.log(arr)
 arr.splice(postion, 0, 11, 12, 13);
-console.log(arr)
+// console.log(arr)
 
 
 // Asynchrouniys''
@@ -49,3 +49,38 @@ function* generatorFunc(param) {
   it.next(3); // { value: undefined, done: false}
   const sum = it.next(5); // { value: 8, done: true }
   sum.value; // 8
+
+
+  const books = [
+    { name: "Harry Potter", author: "Joanne Rowling" },
+    { name: "Warcross", author: "Marie Lu" },
+    { name: "The Hunger Games", author: "Suzanne Collins" },
+  ];
+
+
+  books.sort((a, b) => {
+    const authorNameA = a.author.split(" ")[1];
+    const authorNameB = b.author.split(" ")[1];
+    return authorNameA > authorNameB ? 1 : -1;
+  });
+
+  console.log(books);
+
+//   flatAnArray = (arr) => {
+//     return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flatAnArray(val)) : acc.concat(val), [])
+//   }
+
+function flat(arr){
+    const arrFl = [];
+    arr.forEach(element => {
+        if(Array.isArray(element)){
+            arrFl.push(...flat(element));
+        }else{
+            arrFl.push(element);
+        }
+    });
+
+    return arrFl;
+}
+
+console.log(flat([1,2,[3,4,[5,6,[7,8,[9,10,[11,12,[13,14]]]]]]]));

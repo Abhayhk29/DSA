@@ -102,3 +102,160 @@ function factoryFunc(username, password, isActive = true, isAdmin = false){
 
 const user = factoryFunc('abhay', 'kumar', false, true)
 console.log(user)
+
+
+function calCulator(){
+    add = function(a,b){
+        return a + b;
+    }
+    subtract = function(a,b){
+        return a - b;
+    }
+    multiply = function(a,b){
+        return a * b;
+    }
+    divide = function(a,b){
+        return a / b;
+    }
+
+    return {
+        add,
+        subtract,
+        multiply,
+        divide
+    }
+}
+
+const calc = calCulator();
+console.log(calc.add(10,20))
+
+function pollyFillBind(func, context){
+    return function(){
+        func.apply(context, arguments)
+    }
+}
+
+function customBind(func, defaultContext) {
+    return function(...args) {
+        const context = this !== globalThis ? this : defaultContext;
+        return func.apply(context, args);
+    };
+}
+
+// Example usage
+const obj1 = { value: 1 };
+const obj2 = { value: 2 };
+
+function printValue() {
+    console.log(this.value);
+}
+
+const boundFunc = customBind(printValue, obj1);
+
+boundFunc(); // Output: 1 (default context is obj1)
+
+boundFunc.call(obj2); // Output: 2 (context overridden to obj2)
+
+
+function curry(func){
+    return function curried(...args){
+        if(args.length >= func.length){
+            return func.apply(this, args)
+        } else {
+            return function(...args2){
+                return curried.apply(this, args.concat(args2))
+            }
+        }
+    }
+}
+
+function sum(a,b,c){
+    return a + b + c;
+}
+
+// const curriedSum = curry(sum);
+// console.log(curriedSum(1)(2)(3)()) // Output: 6
+
+
+function throtle(func, limit){
+    let lastFunc;
+    let lastRun;
+
+    return function(...args){
+        const context = this;
+
+        if(!lastRun){
+            func.apply(context,args);
+            lastRun = Date.now();
+        }else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function(){
+                if(Date.now() - lastRun >= limit){
+                    func.apply(context,args);
+                    lastRun = Date.now();
+                }
+            }, limit - (Date.now() - lastRun))
+        }
+    }
+}
+
+
+function debounce(func,delay, context){
+    let timer;
+
+    return function(...args){
+        const context = this ?? context;
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(context, args), delay)
+    }
+}
+
+
+function sampler(fn, context, count){
+    let counter = 0;
+
+    return function(...args){
+        // if(counter < count){
+        //     counter++;
+        //     return fn.apply(context, args)
+        // }
+
+        let lastArgs = args
+        context = this ?? context;
+        if(++counter !== count){
+            return;
+        }
+
+        fn.apply(context, lastArgs);
+        counter = 0;
+    }
+}
+
+let constNumOfTimes = 3;
+function sum(){
+    let argds = arguments;
+
+    if(argds.length === constNumOfTimes){
+        return Array.from(argds).reduce((acc, curr) => acc + curr, 0);
+    }
+
+    return function(){
+        return sum(...argds, ...arguments)
+    }
+}
+
+// console.log(sum(1)(2)(3)) // Output: 6
+// console.log(sum(1,2,3)) // Output: 6
+// console.log(sum(1,2)(3)) // Output: 6
+
+function sumNumbers(a){
+    return function(b){
+        if(b){
+            return sumNumbers(a+b)
+        }
+        return a;
+    }
+}
+
+console.log(sumNumbers(1)(2)(3)(4)())
+console.log(sumNumbers(1)(3)())
