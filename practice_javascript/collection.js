@@ -84,3 +84,54 @@ function flat(arr){
 }
 
 console.log(flat([1,2,[3,4,[5,6,[7,8,[9,10,[11,12,[13,14]]]]]]]));
+
+
+// execute it after 2 secong
+
+function displayNamr(){
+    console.log('abhay')
+}
+
+function executeAfterTwoSecond(fn){
+    if(typeof fn === 'function'){
+        setTimeout(() => {
+            console.log("I am executing after 2 seconds");
+            fn();
+        }, 2000);
+    }else {
+        console.log("not a function")
+    }
+}
+
+console.log(executeAfterTwoSecond(displayNamr));
+console.log(executeAfterTwoSecond('abhay'));
+
+
+function timer(init = 0, step = 1){
+    var interNalId;
+    var count = init;
+
+    function startTimer(){
+        interNalId = setInterval(() => {
+            count += step;
+            console.log(count);
+        }, 1000);
+    }
+
+    function stopTimer(){
+        clearInterval(interNalId);
+        interNalId = null;
+    }
+
+    return {
+        startTimer,
+        stopTimer
+    }
+}
+
+const timer1 = timer(0, 2);
+
+timer1.startTimer();
+setTimeout(() => {
+    timer1.stopTimer();
+}, 10000);
