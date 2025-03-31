@@ -41,18 +41,70 @@ var findAnagrams = function(s, p) {
          if(count === 0){
            result.push(start);
          }
+
          if(mp.hasOwnProperty(s[start])){
+             if(mp[s[start]] === 0){
+                 count++;
+                }
             mp[s[start]] += 1;
-            if(mp[s[start] >= 1]){
-                count++;
-            }
          }
          start++;
          end++
        }
     }
-    return result;
+    console.log(result);
+    return result.length;
 };
 
+function findAnagram(str, pa){
+    let start = 0;
+    let end = 0;
+    let k = pa.length;
 
-console.log(findAnagrams("cbaebabacd","abc"));
+    let result = 0;
+
+    let mp = {};
+
+    for(const p of pa){
+        if(mp[p]){
+            mp[p] += 1;
+        }else{
+            mp[p] = 1;
+        }
+    }
+
+    let count = Object.keys(mp).length;
+    console.log(count);
+    while (end < str.length) {
+        if(mp[str[end]] !== undefined){
+            mp[str[end]]--;
+            if(mp[str[end]] === 0){
+                count--;
+            }
+        }
+
+        if((end - start + 1) < k ){
+            end++
+        } else if((end - start + 1) === k){
+            if(count === 0){
+                result += 1;
+            }
+
+            if(mp[str[start]] !== undefined){
+                if(mp[str[start]] === 0){
+                    count++;
+                }
+                mp[str[start]] += 1;
+            }
+
+            start++;
+            end++
+        }
+    }
+
+    return result;
+}
+
+
+console.log(findAnagram("cbaebabacd","abc"));
+// console.log(findAnagrams("cbaebabacd","abc"));
