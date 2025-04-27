@@ -236,3 +236,20 @@ console.log(onbJectPract.printName())
 console.log(onbJectPract.printNameA())
 
 // Regular vs arrow function
+
+function myFunction(){
+    console.log(this)
+}
+
+myFunction()
+
+const myObj = {
+    /**
+     * 
+     */
+    method() {
+        console.log(this)
+    }
+}
+
+myObj.method();
