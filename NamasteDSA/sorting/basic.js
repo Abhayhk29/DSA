@@ -48,7 +48,7 @@ function bubbleSort(arr){
     return arr;
 }
 // time complexity : O(n^2)
-console.log(bubbleSort([5,2,4,1]))
+// console.log(bubbleSort([5,2,4,1]))
 
 
 // selection sort
@@ -72,4 +72,56 @@ function selectionSort(arr){
 }
 // O(N^2)
 // O(1)
-console.log(selectionSort([2,4,67,6,8,1,9]))
+// console.log(selectionSort([2,4,67,6,8,1,9]))
+
+function insertionSort(arr){
+    let n = arr.length;
+
+    for (let i = 1; i < n; i++) {
+        
+        let curr = arr[i];
+        let prev = i - 1;
+
+        while (arr[prev] > curr && prev >= 0) {
+            arr[prev + 1] = arr[prev];
+            prev--;
+        }
+        arr[prev + 1] = curr;
+        
+    }
+
+    return arr;
+}
+// time O(n^2);
+// O(1);
+// console.log(insertionSort([3,1,5,7,2,4,89,56,11]))
+
+
+function mergeSort(arr){
+     if(arr.length <= 1) return arr;
+     let mid = Math.floor(arr.length / 2);
+     let left = mergeSort(arr.slice(0,mid));
+     let right = mergeSort(arr.slice(mid));
+     return merge(left, right);
+}
+
+function merge(rArr, lArr){
+    let res = [];
+
+    let i = 0;
+    let j = 0;
+
+    while (i < lArr.length && j < rArr.length) {
+        if(lArr[i] < rArr[j]){
+            res.push(lArr[i]);
+            i++;
+        }else{
+            res.push(rArr[j]);
+            j++;
+        }
+    }
+
+    return [...res, ...lArr.slice(i), ...rArr.slice(j)]
+}
+
+console.log(mergeSort([3,1,5,7,2,4,89,56,11]))
