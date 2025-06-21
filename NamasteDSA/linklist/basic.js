@@ -303,3 +303,153 @@ var deleteDuplicates = function(head) {
 
     return head;
 };
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+    // let dummyNode = new ListNode(0);
+    // let curr = dummyNode;
+
+    // while(list1 !== null && list2 !== null){
+    //     if(list1.val < list2.val ){
+    //         curr.next = list1;
+    //         list1 = list1.next
+    //     }else{
+    //         curr.next = list2;
+    //         list2 = list2.next;
+    //     }
+
+    //     curr = curr.next;
+    // }
+
+    // if(list2 !== null){
+    //     curr.next = list2
+    // }
+
+    // if(list1 !== null){
+    //     curr.next = list1;
+    // }
+    
+    // return dummyNode.next
+    if(!list1) return list2;
+    if(!list2) return list1;
+    let curr = null
+    if(list1.val < l2.val){
+        curr = list1;
+        list1 = list1.next;
+    }else{
+        curr = list2;
+        list2 =  list2.next;
+    }
+
+    let start = curr;
+
+    while(list1 && list2){
+        if(list1.val < list2.val){
+            curr.next = list1;
+            list1 = list1.next;
+        }else{
+            curr.next = list2;
+            list2 = list2.next;
+        }
+        curr = curr.next;
+    }
+
+    if(!list1){
+        curr.next = list2
+    }
+
+    if(!list2){
+        curr.next = list1;
+    }
+
+    return start;
+};
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var rotateRight = function(head, k) {
+    if(!head || !head.next) return head;
+
+    let len = 0;
+    let curr = head;
+
+    while(curr){
+        curr = curr.next;
+        len++;
+    }
+
+    k = k % len;
+
+   let s = head;
+   let f = head;
+
+   for(let i = 0; i<k; i++){
+     f = f.next;
+   }
+
+   while(f.next){
+    s = s.next;
+    f = f.next;
+   }
+
+    f.next = head;
+    let newHead = s.next;
+
+    s.next = null;
+
+    return newHead; 
+};
+
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLastWord = function(s) {
+    if(s.length === 0) return 0;
+
+    let n = s.length - 1;
+
+    while(n>= 0){
+        if(s[n] === ' '){
+            n--;
+        }else{
+            break
+        }
+    }
+
+    let count = 0;
+
+    while(n>= 0){
+        if(s[n] != ' '){
+            n--;
+            count++;
+        }else{
+            break;
+        }
+    }
+
+    return count;
+};
+
