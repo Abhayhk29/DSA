@@ -203,3 +203,103 @@ var removeElements = function(head, val) {
 
     return sent.next;
 };
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function(head, n) {
+    // let length = 0;
+    // let curr = head;
+    // while(curr !== null){
+    //     length++;
+    //     curr = curr.next;
+    // }
+    // if(n >  length ) return null;
+
+    // const pos = length - n;
+
+    // if(pos === 0){
+    //     head = head.next;
+    //     return head;
+    // }
+    // let currNode = head;
+    // for(let i = 0; i < pos - 1; i++){
+    //     currNode = currNode.next;
+    // }
+
+    // currNode.next = currNode.next.next;
+    // return head;
+
+    // two pass
+    // let senitalNode = new ListNode();
+    // senitalNode.next = head;
+    // let length = 0;
+
+    // while(head){
+    //     head = head.next;
+    //     length++;
+    // }
+
+    // let prevPos = length - n;
+
+    // let prev = senitalNode;
+
+    // for(let i = 0; i < prevPos; i++){
+    //     prev = prev.next;
+    // }
+
+    // prev.next = prev.next.next;
+
+    // return senitalNode.next;
+
+    let sentinalNode = new ListNode();
+    sentinalNode.next = head;
+    let first = sentinalNode;
+
+    for(let i = 0; i < n; i++){
+        first = first.next;
+    }
+
+    second = sentinalNode;
+    while(first.next){
+        first = first.next;
+        second = second.next;
+    }
+
+    second.next = second.next.next;
+
+    return sentinalNode.next;
+};
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var deleteDuplicates = function(head) {
+    let curr = head;
+    while(curr && curr.next){
+        if(curr.val == curr.next.val){
+            curr.next = curr.next.next;
+        }else{
+            curr = curr.next;
+        }
+    }    
+
+    return head;
+};
