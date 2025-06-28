@@ -229,3 +229,105 @@ var reverseStr = function(s, k) {
 // s = O(n)
 // if not converting to array
 // t = O(n)
+
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isPalindrome = function(s) {
+    // let b = s.replace(/[^A-Z0-9]+/ig,"");
+    // b = b.toLowerCase();
+    // const len = b.length;
+    // for(let i = 0; i < len / 2; i++){
+    //     if(b[i] !== b[len - 1 - i]){
+    //         return false;
+    //     }
+    // }
+    // return true;
+
+    // s = s.toLowerCase()
+    // let filterString = '';
+    // let rev = ''
+    // for(let i = 0; i < s.length; i++){
+    //     if(s[i].match(/[a-z0-9]/i)){
+    //         filterString += s[i];
+
+    //         rev = s[i] + rev;
+    //     }
+    // }
+
+    // let rev = filterString.split("").reverse().join("");
+    // // t = O(n) 
+    // // s : O(n)
+    // return filterString === rev
+    s = s.toLowerCase()
+    let i = 0;
+    let j = s.length - 1;
+    while(i < j){
+        if(!s[i].match(/[a-z0-9]/i)){
+            ++i;
+        } else if(!s[j].match(/[a-z0-9]/i)){
+            --j
+        } else if(s[i] === s[j]){
+            ++i;
+            --j;
+        }else{
+            return false
+        } 
+    }
+    return true;
+    // t : o(n) 
+    // s : o(1)
+    // leetcode : 125
+};
+
+/**
+ * @param {string} num
+ * @return {string}
+ */
+var largestOddNumber = function(num) {
+    let len = num.length - 1;
+
+    while(len >= 0){
+        if(Number(num[len]) % 2 === 1){
+            return num.substring(0, len + 1)
+        }
+        len--
+    }
+
+    return ''
+};
+
+//  s = O(1)
+// t = O(n)
+// leetocde 1903
+
+/**
+ * @param {string[]} strs
+ * @return {string}
+ */
+var longestCommonPrefix = function(strs) {
+    let x = 0;
+    while(x < strs[0].length){
+        let ch = strs[0][x];
+        for(let i = 1; i < strs.length; i++){
+            if(ch != strs[i][x] || x == strs[i].length){
+                return strs[0].substring(0,x);
+            }
+        }
+        ++x;
+    }
+    return strs[0]
+};
+
+// s O(1)
+// t O(n) leetcode : 14
+// Example 1:
+
+// Input: strs = ["flower","flow","flight"]
+// Output: "fl"
+// Example 2:
+
+// Input: strs = ["dog","racecar","car"]
+// Output: ""
+// Explanation: There is no common prefix among the input strings.
