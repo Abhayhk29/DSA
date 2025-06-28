@@ -331,3 +331,179 @@ var longestCommonPrefix = function(strs) {
 // Input: strs = ["dog","racecar","car"]
 // Output: ""
 // Explanation: There is no common prefix among the input strings.
+
+
+// if we sort an item in the not mutable we need to create the new string so new string we need to create so O(n) will be space
+
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {boolean}
+ */
+var isAnagram = function(s, t) {
+    // if(s.length !== t.length){
+    //     return false
+    // }
+    
+    
+    // let sortedS = s.split('').sort().join();
+    // let sortedT = t.split('').sort().join();
+    
+    // return sortedS == sortedT;
+
+    // let obj = {};
+
+    //     if(s.length !== t.length) return false;
+
+    //     for(let i = 0; i <= s.length; i++){
+    //         if(obj[s[i]]){
+    //             obj[s[i]] += 1
+    //         }else{
+    //             obj[s[i]] = 1;
+    //         }
+    //     }
+
+    //     for(let j = 0; j <= t.length; j++){
+    //         if(obj[t[j]]){
+    //             obj[t[j]] -= 1;
+    //         }
+
+    //         if(obj[t[j]] === 0){
+    //             delete obj[t[j]];
+    //         }
+    //     }
+
+    //     return Object.keys(obj).length > 0 ? false : true;
+
+    
+    if(s.length != t.length) return false
+    let obj = {};
+
+    for(let i = 0; i < s.length; i++){
+        if(obj[s[i]]){
+            obj[s[i]] += 1
+        }else{
+            obj[s[i]] = 1;
+        }
+    }
+
+    for(let i = 0; i < t.length; i++){
+        if(!obj[t[i]] || obj[t[i]] < 0){
+            return false;
+        }else{
+
+        --obj[t[i]]
+        }
+    }
+    return true;
+};
+
+// t : O(n);
+// S : O(1) because alpahabet will be of 26 only and it will be constant it will not increase it as the input increase
+// leetcode 242
+// Example 1:
+// Input: s = "anagram", t = "nagaram"
+// Output: true
+// Example 2:
+// Input: s = "rat", t = "car"
+// Output: false
+
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {boolean}
+ */
+var isIsomorphic = function(s, t) {
+    if(s.length != t.length) return false;
+
+    // let x = 0;
+    // let obj = {};
+    // let obj2 = {};
+
+    // for(let i = 0; i < s.length; i++){
+
+    // }
+    // while(x < s.length){
+    //     if(!obj[s[x]]){
+    //         obj[s[x]] = t[x]
+    //     }else if(obj[s[x]] && t[x] != obj[s[x]]){
+    //         return false;
+    //     }
+
+    //     ++x;
+    // }
+
+    // return true;
+    let mapStoT = {}
+    let mapTtoS = {};
+
+    for(let i = 0; i < s.length; i++){
+        if(!mapStoT[s[i]] && !mapTtoS[t[i]]){
+            mapStoT[s[i]] = t[i];
+            mapTtoS[t[i]] = s[i];
+        } else if(mapStoT[s[i]] !== t[i]){
+            return false;
+        }else if(mapTtoS[t[i]] !== s[i]){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+// t O(n) :
+//  s O(1)
+// 205. Isomorphic Strings
+
+/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function(strs) {
+    // let obj = {};
+    // debugger;
+    // for(let word of strs){
+    //     let alw = word.split('').sort().join('');
+        
+    //     if(obj[alw]){
+    //         obj[alw].push(word);
+    //     }else{
+    //         obj[alw] = [word];
+    //     }
+        
+    // }
+
+    // for(let word of strs){
+    //     let key = new Array(26).fill(0);
+    //     for(let w of word){
+    //         key[w.charCodeAt(0) - 'a'.charCodeAt(0)] += 1;
+    //     }
+
+    //     key = key.join(',');
+
+    //     if(!obj[key]){
+    //         obj[key] = [];
+    //     }
+
+    //     obj[key].push(word);
+    // }
+    
+    // return Object.values(obj);
+    let obj = {};
+    for(let i = 0; i < strs.length; i++){
+        let alw = strs[i].split('').sort().join('');
+        if(!obj[alw]){
+            obj[alw] = [strs[i]];
+        }else{
+            obj[alw].push(strs[i]);
+            
+        }
+    }
+    console.log(obj)
+    return [...Object.values(obj)]
+    // t = n * m logn
+    // s = N * m
+};
+
+
+
