@@ -308,3 +308,83 @@ MinStack.prototype.getMin = function() {
  */
 
 //  155. Min Stackgit s
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var removeOuterParentheses = function(s) {
+    // let output = '';
+    // let stack = [];
+
+    // for(let i = 0; i < s.length; i++){
+    //     if(s[i] === '('){
+    //         stack.push(s[i]);
+    //         let len = stack.length;
+    //         if(len > 1){
+    //                 // let top = stack[stack.length - 2]
+    //                 output += `${s[i]}`
+    //         }
+    //     } else {
+    //         let len = stack.length;
+    //         if(len > 1){
+    //                 // let top = stack[stack.length - 2]
+    //                 output += `${s[i]}`
+    //         }
+    //         stack.pop();
+    //     }
+    // }
+    // t O(n)
+    // s O(n)
+    // return output;
+    let output = '';
+    let level = 0;
+    for(let i = 0; i < s.length; i++){
+        if(s[i] === '('){
+            ++level;
+            if(level > 1){
+                output += s[i];
+            }
+        }else{
+            if(level > 1){
+                output += s[i];
+            }
+            --level
+        }
+    }
+    // t O(n)
+    // S O(1)
+    return output;
+};
+
+
+/**
+ * @param {string[]} tokens
+ * @return {number}
+ */
+var evalRPN = function(tokens) {
+    let obj = {
+        '+' : true,
+        '-': true,
+        '*': true,
+        '/':true
+    }
+    let stack = [];
+    for(let i = 0; i < tokens.length; i++){
+        let exp = tokens[i]
+        if(obj[exp]){
+            let first  = stack.pop();
+            let second  = stack.pop();
+            let ans = eval(`${second} ${exp} ${first}`)
+            stack.push(Math.trunc(ans))
+        }else{
+            stack.push(exp);
+        }
+    }
+
+    return Number(stack.pop())
+};
+
+// s O() 
+// t O()
+// 150. Evaluate Reverse Polish Notation
