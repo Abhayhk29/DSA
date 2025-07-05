@@ -468,7 +468,7 @@ var dailyTemperatures = function(arr) {
     let ans = Array(n).fill(0);
 
     stack.push(n - 1);
-    ans[n - 1] = 0; 
+    // ans[n - 1] = 0; 
 
     for(let i = n - 2; i >= 0; i--){
         while(stack.length){
@@ -489,3 +489,146 @@ var dailyTemperatures = function(arr) {
 // time O(n)
 // space O(n)
 // temperature 739
+
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var nextGreaterElements = function(nums) {
+    // let n = arr.length - 1;
+    // let result = new Array(n);
+    // let stack = [];
+
+    // for (let i = n; i >= 0; i--) {
+    //     if(stack.length === 0){
+    //         result[n] = -1;
+    //     }else if(stack.length > 0 && stack[stack.length - 1] > arr[i]){
+    //         result[i] = stack[stack.length - 1];
+    //     } else if(stack.length > 0 && stack[stack.length - 1] <= arr[i]){
+    //         while (stack.length > 0 && stack[stack.length - 1] <= arr[i]) {
+    //             stack.pop();
+    //         }
+    //         if(stack.length === 0){
+    //             result[i] = -1;
+    //         }else{
+    //             result[i] = stack[stack.length - 1];
+    //         }
+    //     }
+    //     stack.push(arr[i])
+    // }
+
+    // return result;
+    // let arr = [...nums, ...nums];
+    // let n = arr.length;
+    // let stack = [];
+    // let ans = Array(n).fill(-1);
+
+    // stack.push(-1);
+
+    // for(let i =  n - 2; i >= 0; i--){
+    //     while(stack.length){
+    //         let top = stack[stack.length - 1];
+    //         if(arr[i] >= top){
+    //             stack.pop();
+    //         }else{
+    //             ans[i] = top;
+    //             break
+    //         }
+    //     }
+    
+    //     stack.push(arr[i])
+    // }
+
+    // return ans.slice(0,n/2);
+
+     let arr = [...nums];
+    let n = arr.length;
+    let stack = [];
+    let ans = Array(n).fill(-1);
+
+    stack.push(-1);
+
+    for(let i =  (2 * n) - 2; i >= 0; i--){
+        while(stack.length){
+            let top = stack[stack.length - 1];
+            if(arr[i % n] >= top){
+                stack.pop();
+            }else{
+                ans[i % n] = top;
+                break
+            }
+        }
+    
+        stack.push(arr[i % n])
+    }
+
+    return ans.slice(0,n);
+};
+
+
+// time O(n)
+// space O(n)
+// 503 Next Greater 2
+
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var orangesRotting = function(grid) {
+    let m = grid.length;
+    let n = grid[0].length
+
+    let queue = [];
+
+    for(let i = 0; i < m; i++){
+        for(let j = 0; j < n; j++){
+            if(grid[i][j] === 2){
+                queue.push([i,j,0])
+            }
+        }
+    }
+
+    let maxMinutes = 0;
+
+    while(queue.length){
+        let [x,y,min] = queue.shift();
+
+        if( x > 0 && grid[x-1][y] === 1){
+            grid[x-1][y] = 2;
+            queue.push([x-1,y,min + 1]);
+        }
+
+        if(x < m - 1 && grid[x+1][y] === 1){
+            grid[x+1][y] = 2;
+            queue.push([x+1,y, min + 1]);
+        }
+
+        if(y < n - 1 && grid[x][y + 1] === 1){
+            grid[x][y + 1] = 2;
+            queue.push([x,y + 1, min + 1]);
+        }
+
+        if( y > 0 && grid[x][y - 1] === 1){
+            grid[x][y - 1] = 2;
+            queue.push([x,y - 1, min + 1]);
+        }
+
+        maxMinutes = Math.max(maxMinutes, min)
+    }
+
+     for(let i = 0; i < m; i++){
+        for(let j = 0; j < n; j++){
+            if(grid[i][j] === 1){
+                return -1
+            }
+        }
+    }
+
+    return maxMinutes
+
+};
+
+
+// time O(n^2)
+// space O(n^2)
+// 994 rotting oranges
