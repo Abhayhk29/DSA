@@ -388,3 +388,104 @@ var evalRPN = function(tokens) {
 // s O() 
 // t O()
 // 150. Evaluate Reverse Polish Notation
+
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var nextGreaterElement = function(nums1, nums2) {
+    let nextObj = {};
+    let stack = [];
+    let n = nums2.length;
+
+    stack.push(nums2[n - 1]);
+    nextObj[nums2[n - 1]] = -1;
+
+    for(let i = n - 2; i >= 0; i--){
+        let top = stack[stack.length - 1];
+        if(nums2[i] < top){
+            nextObj[nums2[i]] = top;
+        }else{
+            while(stack.length){
+                if(stack[stack.length -1] < nums2[i]){
+                    stack.pop();
+                }else{
+                    nextObj[nums2[i]] = stack[stack.length -1];
+                    break;
+                }
+            }
+            if(stack.length === 0){
+                nextObj[nums2[i]] = -1;
+            }
+        }
+
+        stack.push(nums2[i])
+    }
+
+    let ans = [];
+    for(let i = 0; i < nums1.length; i++){
+        ans.push(nextObj[nums1[i]])
+    }
+
+    return ans;
+};
+
+// time O(n)
+// space O(n)
+// 496 leetcode
+
+/**
+ * @param {number[]} temperatures
+ * @return {number[]}
+ */
+var dailyTemperatures = function(arr) {
+    // let n = arr.length - 1;
+    // let result = new Array(n);
+    // let stack = [];
+
+    // for (let i = n; i >= 0; i--) {
+    //     if(stack.length === 0){
+    //         result[i] = 0;
+    //     }else if(stack.length > 0 && stack[stack.length - 1].first > arr[i]){
+    //         result[i] = stack[stack.length - 1].second - i;
+    //     } else if(stack.length > 0 && stack[stack.length - 1].first <= arr[i]){
+    //         while (stack.length > 0 && stack[stack.length - 1].first <= arr[i]) {
+    //             stack.pop();
+    //         }
+    //         if(stack.length === 0){
+    //             result[i] = 0;
+    //         }else{
+    //             result[i] = stack[stack.length - 1].second - i;
+    //         }
+    //     }
+    //     stack.push({first:arr[i],second:i})
+    // }
+
+    // return result;
+    let stack = [];
+    let n = arr.length;
+    let ans = Array(n).fill(0);
+
+    stack.push(n - 1);
+    ans[n - 1] = 0; 
+
+    for(let i = n - 2; i >= 0; i--){
+        while(stack.length){
+            let top = stack[stack.length - 1];
+            if(arr[i] >= arr[top]){
+                stack.pop();
+            }else{
+                ans[i] = top - i;
+                break
+            }
+        }
+        stack.push(i)
+    }
+
+    return ans;
+};
+
+// time O(n)
+// space O(n)
+// temperature 739
