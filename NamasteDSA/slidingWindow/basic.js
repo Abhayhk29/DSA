@@ -466,6 +466,210 @@ var trap = function(arr) {
 // S O(n)
 // t O(n)
 
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    // let start = 0;
+    // let end = 0;
+    // let max = 0;
+
+    // let obj = new Set();
+
+    // while(end < s.length){
+    //     if(!obj.has(s[end])){
+    //         obj.add(s[end]);
+    //         max = Math.max(max,obj.size);
+    //         end++;
+    //     }else{
+    //         obj.delete(s[start]);
+    //         start++;
+    //     }
+    // }
+
+    // return max;
+    let start = 0;
+    let end = 0;
+    let max = 0;
+
+    let obj = new Map();
+
+    while(end < s.length){
+        if(obj.has(s[end]) && obj.get(s[end]) >= start){
+            start = obj.get(s[end]) + 1;
+        }
+        obj.set(s[end],end);
+        let currW = end -  start + 1;
+        max = Math.max(max,currW);
+        end++;
+        // if(!obj.has(s[end])){
+        //     obj.set(s[end],end);
+        //     max = Math.max(max,obj.size);
+        //     end++;
+        // }else{
+            
+        //     obj.delete(s[start]);
+        //     start++;
+        // }
+    }
+
+    return max;
+};
+
+// t : O(n)
+// s : O(1) || O(m)
+
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function(s, k) {
+    let start = 0;
+    let end = 0;
+    let max = 0;
+
+    let obj = new Map();
+    obj[s[start]] = 1;
+    while(end < s.length){
+        if(isWindowValid(obj,k)){
+            max = Math.max(max, end - start + 1);
+            ++end;
+            obj[s[end]] = !obj[s[end]] ? 1 : ++obj[s[end]]
+        }else{
+            --obj[s[start]];
+            start++;
+        }
+    }
+
+    return max;
+};
+
+
+function isWindowValid(obj,k){
+    let totalCount = 0;
+    let maxCount = 0;
+
+    for(let item in obj){
+        totalCount += obj[item];
+        maxCount = Math.max(maxCount, obj[item])
+    }
+
+    return (totalCount - maxCount) <= k;
+}
+
+// leetcode 424
+// S : O(n) O(m*n)
+// t : O(n) : O(1)
+
+/**
+ * @param {string} s1
+ * @param {string} s2
+ * @return {boolean}
+ */
+var checkInclusion = function(s1, s2) {
+    let hashS = Array(26).fill(0);
+    let hashW = Array(26).fill(0);
+
+    let wind_length = s1.length;
+
+    for(let i = 0; i < wind_length; i++){
+        ++hashS[s1.charCodeAt(i) - 97];
+        ++hashW[s2.charCodeAt(i) - 97];
+    }
+    let i = 0;
+    let j = wind_length - 1;
+
+    while(j < s2.length){
+        if(isHashSame(hashS, hashW)){
+            return true;
+        }else{
+            --hashW[s2.charCodeAt(i) - 97];
+            ++i;
+            ++j;
+            ++hashW[s2.charCodeAt(j) - 97];
+        }
+    }
+
+    return false;
+};
+
+function isHashSame(s1,s2){
+    for(let i = 0; i < 26; i++){
+        if(s1[i] !== s2[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
+// t O(n*m) => O(n)
+// s O(1) || O(m)
+
+// 567 leetcode
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var maxSlidingWindow = function(nums, k) {
+    // let que = [];
+
+    // let start = 0;
+    // let end = 0;
+
+    // let result = [];
+
+    // while(end < nums.length){
+    //     while(que.length > 0 && que[que.length - 1] < nums[end]){
+    //         que.pop();
+    //     }
+
+    //     que.push(nums[end]);
+
+    //     if((end - start + 1) < k){
+    //         end++;
+    //     }else if((end - start + 1) === k){
+    //         result.push(que[0]);
+    //         if(que[0] === nums[start]){
+    //             que.shift();
+    //         }
+    //         start++;
+    //         end++;
+    //     }
+    // }
+
+    // return result;
+
+    let start = 0
+    let end = 0;
+    let result = [];
+    let q = [];
+    while(end < nums.length){
+        while(q.length && nums[end] > q[q.length - 1]){
+            q.pop();
+        }
+
+        q.push(nums[end]);
+
+        if(end >= k - 1 ){
+            result.push(q[0]);
+            if(q[0] == nums[start]){
+                q.shift();
+            }
+            start++;
+        }
+        end++;
+    }
+
+    return result;
+};
+
+// T : O(n)
+// s O(k)
+
 
 
 
