@@ -178,3 +178,72 @@ var inorderTraversal = function(root) {
 
 
 // iterative approach
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var postorderTraversal = function(root) {
+    // let ans = [];
+
+    // function traversal(curr){
+    //     if(!curr) return;
+
+    //     traversal(curr.left)
+    //     traversal(curr.right)
+    //     ans.push(curr.val)
+    // }
+
+    // traversal(root);
+
+    // return ans;
+
+    // let curr = null;
+    if(!root) return [];
+    let s1 = [root];
+    let s2 = [];
+    while(s1.length > 0){
+        let curr = s1.pop();
+        s2.push(curr);
+        curr?.left && s1.push(curr.left);
+        curr?.right && s1.push(curr.right);
+    }
+
+    let ans = [];
+    while(s2.length){
+        ans.push(s2?.pop().val)
+    }
+
+    return ans;
+
+    // one stack approach
+    // if(!root) return [];
+    // let stack = [];
+    // let curr = root;
+    // let ans = []
+    // // let prevNode = null;
+    // let visitedV = null;
+    // while(stack.length || curr){
+    //     while(curr){
+    //         stack.push(curr);
+    //         curr = curr.left;
+    //     }
+    //     let peekNode = stack[stack.length - 1];
+    //     if(peekNode.right && peekNode.right !== visitedV){
+    //         curr = peekNode.right
+    //     }else{
+    //         ans.push(peekNode.val);
+    //         visitedV = stack.pop()
+    //     }
+    // }
+    // return ans;
+
+};
+
