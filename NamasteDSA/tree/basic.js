@@ -330,3 +330,123 @@ var levelOrder = function(root) {
     return ans
 };
 
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isSymmetric = function(root) {
+    // let queue = [];
+    // queue.push(root.left);
+    // queue.push(root.right);
+    // while(queue.length > 0) {
+    //     let left = queue.shift();
+    //     let right = queue.shift();
+    //     if(left === null && right === null) {
+    //         continue;
+    //     }
+    //     if(left === null || right === null) {
+    //         return false;
+    //     }
+    //     if (left.val !== right.val) {
+    //         return false;
+    //     }
+    //     queue.push(left.left);
+    //     queue.push(right.right);
+    //     queue.push(left.right);
+    //     queue.push(right.left);
+    // }
+    // return true;
+    // if(!root) return 
+    // const isMirror = (left, right) => {
+    //     if(!left && !right) return true;
+
+    //     if(!right || !left) return false;
+    //     return right.val === left.val && isMirror(left.left, right.right) && isMirror(left.right, right.left);
+    // }
+
+    // return isMirror(root.left, root.right)
+    let q = [root.left, root.right];
+    while(q.length){
+        let p1 = q.shift();
+        let p2 = q.shift();
+
+        if(!p1 && !p2) continue;
+
+        if(p1 == null || p2 == null) return false;
+
+        if(p1.val !== p2.val) return false;
+
+        q.push(p1.left, p2.right);
+        q.push(p1.right, p2.left);
+    }
+    return true;
+};
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+    // if(!root){
+    //     return null;
+    // }
+
+    // let tmp = root.left;
+    // root.left = root.right;
+    // root.right = tmp;
+    
+    // invertTree(root.left);
+    // invertTree(root.right);
+
+    // return root;
+
+    if(!root){
+        return root;
+    }
+
+    let temp = root.left;
+    root.left = root.right;
+    root.right = temp;
+
+    invertTree(root.left);
+    invertTree(root.right);
+
+    return root;
+};
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function(p, q) {
+    if(!p && !q) return true;
+
+    if(!p || !q) return false;
+
+    return p.val === q.val && isSameTree(p.left,q.left) && isSameTree(p.right, q.right);
+};
