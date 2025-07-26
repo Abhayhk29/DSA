@@ -450,3 +450,165 @@ var isSameTree = function(p, q) {
 
     return p.val === q.val && isSameTree(p.left,q.left) && isSameTree(p.right, q.right);
 };
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isBalanced = function(root) {
+    let ans = true;
+    let calculateHeight = (curr) => {
+        if(!curr) return 0;
+        let leftHeight = calculateHeight(curr.left);
+        let rightHeight = calculateHeight(curr.right);
+
+        if(Math.abs(leftHeight - rightHeight) > 1){
+            ans = ans && false;
+        }
+
+        return 1 + Math.max(leftHeight, rightHeight);
+    }
+    calculateHeight(root);
+    return ans;
+};
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var diameterOfBinaryTree = function(root) {
+    // let dia = 0;
+
+    // function height(node){
+    //     if (!node){
+    //         return 0;
+    //     }
+
+    //     let leftHeight = height(node.left);
+    //     let rightHeight = height(node.right);
+
+    //     let diam = leftHeight + rightHeight + 1;
+    //     dia = Math.max(dia, diam);
+    //     return Math.max(leftHeight, rightHeight) + 1;
+    // }
+
+    // height(root);
+
+    // return dia - 1;
+
+    let maxDiam = 0;
+
+    function calcDepth(curr){
+        if(!curr) return 0;
+
+        let leftDepth = calcDepth(curr.left);
+        let rightDepth = calcDepth(curr.right);
+        let currDepth = leftDepth + rightDepth;
+        maxDiam = Math.max(currDepth, maxDiam);
+        return 1 + Math.max(leftDepth, rightDepth);
+    }
+    calcDepth(root)
+    return maxDiam;
+};
+
+// let diameter = 0;
+// function diameterOfBinaryTree(root) {
+//   height(root);
+//   return diameter - 1;
+// }
+
+// function height(node) {
+//   if (node === null) {
+//     return 0;
+//   }
+//   let leftHeight = height(node.left);
+//   let rightHeight = height(node.right);
+//   let dia = leftHeight + rightHeight + 1;
+//   diameter = Math.max(diameter, dia);
+//   return Math.max(leftHeight, rightHeight) + 1;
+// }
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var zigzagLevelOrder = function(root) {
+    // if(!root){
+    //     return [];
+    // }
+    
+    // let queue = [root];
+    // let zigzag = true;
+    // let res = []
+    // while(queue.length > 0){
+    //     let dummy = [];
+    //     let size = queue.length;
+    //     for (let i = 0; i < size; i++) {
+    //         const pop = queue.shift();
+    //         dummy.push(pop.val);
+    //         if(pop.left){
+    //             queue.push(pop.left)
+    //         }            
+
+    //         if(pop.right){
+    //             queue.push(pop.right);
+    //         }
+    //     }
+    //     if(zigzag){
+    //         res.push(dummy);
+    //         zigzag = false;
+    //     }else{
+    //         res.push(dummy.reverse());    
+    //         zigzag = true;
+    //     }
+        
+        
+    // }
+    
+    // return res;
+    if(!root) return [];
+    let ans = [];
+    let q = [root];
+    let level = 0;
+    while(q.length){
+        let levelArr = [];
+        let levelSize = q.length;
+        for(let i = 0; i < levelSize; i++){
+            let curr = q.shift();
+            if(level % 2 == 0){
+                levelArr.push(curr.val)
+            }else{
+                levelArr.unshift(curr.val)
+            }
+            curr.left && q.push(curr.left)
+            curr.right && q.push(curr.right)
+        }
+        ans.push(levelArr);
+        ++level;
+    }
+    return ans;
+};
