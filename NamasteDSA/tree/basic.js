@@ -612,3 +612,201 @@ var zigzagLevelOrder = function(root) {
     }
     return ans;
 };
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var zigzagLevelOrder = function(root) {
+    // if(!root){
+    //     return [];
+    // }
+    
+    // let queue = [root];
+    // let zigzag = true;
+    // let res = []
+    // while(queue.length > 0){
+    //     let dummy = [];
+    //     let size = queue.length;
+    //     for (let i = 0; i < size; i++) {
+    //         const pop = queue.shift();
+    //         dummy.push(pop.val);
+    //         if(pop.left){
+    //             queue.push(pop.left)
+    //         }            
+
+    //         if(pop.right){
+    //             queue.push(pop.right);
+    //         }
+    //     }
+    //     if(zigzag){
+    //         res.push(dummy);
+    //         zigzag = false;
+    //     }else{
+    //         res.push(dummy.reverse());    
+    //         zigzag = true;
+    //     }
+        
+        
+    // }
+    
+    // return res;
+    // if(!root) return [];
+    // let ans = [];
+    // let q = [root];
+    // let level = 0;
+    // while(q.length){
+    //     let levelArr = [];
+    //     let levelSize = q.length;
+    //     for(let i = 0; i < levelSize; i++){
+    //         let curr = q.shift();
+    //         if(level % 2 == 0){
+    //             levelArr.push(curr.val)
+    //         }else{
+    //             levelArr.unshift(curr.val)
+    //         }
+    //         curr.left && q.push(curr.left)
+    //         curr.right && q.push(curr.right)
+    //     }
+    //     ans.push(levelArr);
+    //     ++level;
+    // }
+    // return ans;
+    if (!root) return [];
+
+    const result = [];
+
+    function dfs(node,level){
+        if(!node) return;
+        if(result.length === level)
+            result[level] = [];
+
+        if(level % 2 === 0){
+            result[level].push(node.val);
+        }else{
+            result[level].unshift(node.val);
+        }
+
+        dfs(node.left, level+1);
+        dfs(node.right, level+1);
+    }
+
+    dfs(root,0);
+    return result
+};
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} subRoot
+ * @return {boolean}
+ */
+var isSubtree = function(root, subRoot) {
+    let rootHash = serialize(root)
+    let rootSubHash = serialize(subRoot)
+
+    return rootHash.includes(rootSubHash);
+};
+
+let serialize = (root) => {
+    let hash = '';
+    let traversal = (curr) => {
+        if(!curr){
+            hash = hash + '-#'
+            return;
+        }
+        hash = hash + "-" + curr.val;
+        traversal(curr.left)
+        traversal(curr.right)
+    }
+    traversal(root);
+    return hash;
+}
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var goodNodes = function(root) {
+    let ans = 0;
+    let traversal = (curr, maxSeenFar) => {
+        if(curr.val >= maxSeenFar){
+            ++ans;
+        }
+        let currMax = Math.max(curr.val, maxSeenFar);
+        curr.left && traversal(curr.left, currMax);
+        curr.right && traversal(curr.right, currMax);
+    }    
+    traversal(root, -Infinity);
+    return ans;
+};
+
+
+/**
+ * // Definition for a Node.
+ * function Node(val, left, right, next) {
+ *    this.val = val === undefined ? null : val;
+ *    this.left = left === undefined ? null : left;
+ *    this.right = right === undefined ? null : right;
+ *    this.next = next === undefined ? null : next;
+ * };
+ */
+
+/**
+ * @param {Node} root
+ * @return {Node}
+ */
+var connect = function(root) {    
+    // let curr = root;
+    // let nxt = root ? root.left : null;
+    // while (curr && nxt) {
+    //     curr.left.next = curr.right;
+    //     if (curr.next) {
+    //         curr.right.next = curr.next.left;
+    //     }
+    //     curr = curr.next;
+    //     if (!curr) {
+    //         curr = nxt;
+    //         nxt = curr.left;
+    //     }
+    // }
+    // return root;
+    if(!root) return root;
+    let traversal = (curr) => {
+        if(curr.left){
+            curr.left.next = curr.right;
+        }
+        if(curr.right && curr.next){
+            curr.right.next = curr.next.left;
+        }
+        curr.left && traversal(curr.left)
+        curr.right && traversal(curr.right)
+    }
+    traversal(root);
+    return root;
+};
+
+
