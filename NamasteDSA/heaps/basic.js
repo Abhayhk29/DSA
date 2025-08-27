@@ -284,3 +284,31 @@ var topKFrequent = function(nums, k) {
 
         return res;
 };
+
+
+/**
+ * @param {number[][]} matrix
+ * @param {number} k
+ * @return {number}
+ */
+var kthSmallest = function(matrix, k) {
+    let n = matrix[0].length;
+
+    let heap = new MinPriorityQueue(x => x.val);
+
+    for(let i = 0; i < n; i++){
+        heap.push({val:matrix[i][0], row:i, col:0});
+    }
+
+    for(let j = 0; j < k - 1; j++){
+        let {val,row,col} = heap.pop();
+        if(col + 1 < n){
+            heap.push({val:matrix[row][col + 1], row:row, col:col + 1})
+        }
+    }
+
+    return heap.pop().val;
+};
+
+// space o(Min(n,k))
+// time : O(n log(n))
