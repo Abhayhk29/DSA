@@ -275,3 +275,178 @@ var permuteUnique = function(nums) {
 // space : O(n)
 //  time : O(n. n!)
 
+/**
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function(s) {
+    let result= [];
+    // let currentPali = [];
+//     aab l = 0 , R =2
+    
+    const checkPalidrome = (str, left, right) => {
+        while(left < right){
+            if(str[left] !== str[right]){
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+    
+    const palidrome = (start,currentPali)=> {
+        if(start ===s.length){
+            result.push([...currentPali]);
+            return;
+        }
+        
+        for(let e  = start; e < s.length; e++){
+            if(checkPalidrome(s, start,e)){
+                currentPali.push(s.substr(start, e + 1))
+                palidrome(e + 1, currentPali)
+                currentPali.pop(); 
+            }
+        }
+    }
+    
+    palidrome(0,[])
+    return result;
+};
+
+/**
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function(s) {
+    let result = [];
+
+    const isPalidrome = (s) => {
+        let start = 0;
+        let end = s.length - 1;
+
+        while(start < end){
+            if(s[start++] !== s[end--]) return false;
+        }
+
+        return true;
+    }
+    const backtrack = (path, str) => {
+        if(!str.length){
+            result.push([...path])
+            // return
+        }
+        for(let i = 1; i <= str.length; i++){
+            let choice = str.substring(0,i);
+
+            if(!isPalidrome(choice)) continue;
+
+            path.push(choice);
+            backtrack(path, str.substring(i));
+            path.pop();
+        }
+    }
+
+    backtrack([],s);
+    return result;
+};
+
+// t  O(n*2^n)
+// s O(n)
+
+
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function(board, word) {
+    let result = false;
+    let m = board.length;
+    let n = board[0].length;
+
+    let backtrack = (x,y,nextIndex) => {
+
+        if(nextIndex === word.length){
+            result = true;
+        }
+        let originalVal = board[x][y];
+        board[x][y] = '#';
+        if( y < n - 1 && board[x][y + 1] === word[nextIndex]){
+            backtrack(x, y + 1, nextIndex + 1)
+        }
+
+        if( y > 0 && board[x][y - 1] === word[nextIndex]){
+            backtrack(x, y - 1, nextIndex + 1)
+        }
+
+        if(x > 0 && board[x - 1][y] === word[nextIndex]){
+            backtrack(x - 1, y, nextIndex + 1)
+        }
+
+        if( x < m - 1 && board[x + 1][y] === word[nextIndex]){
+            backtrack(x + 1, y , nextIndex + 1)
+        }
+
+        board[x][y] = originalVal;
+    }
+
+    for(let i = 0 ; i < m ; i++){
+        for(let j = 0; j < n; j++){
+            if(board[i][j] === word[0]){
+                backtrack(i,j,1);
+            }
+        }
+    }
+
+    return result;
+};
+
+// t = O(l*3^n)  l = grid length = x * y   n = word length 
+// s : O(n) n = word length which we have to search
+
+
+/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function(n) {
+    let result = [];
+    let board = Array.from( {length: n}, () => Array(n).fill('.'))
+    let backtrack = (board, row, colSet, digSet, antiSet) => {
+        if(row === n){
+            result.push(transforms(board));
+
+        }
+
+        for(let col = 0; col < n ; col++){
+            if(colSet.has(col) || digSet.has(row - col) || antiSet.has(row + col)){
+                continue;
+            }
+
+            board[row][col] = 'Q';
+            colSet.add(col);
+            digSet.add(row - col);
+            antiSet.add(row + col);
+
+            backtrack(board, row + 1, colSet, digSet, antiSet)
+
+            board[row][col] = '.';
+            colSet.delete(col);
+            digSet.delete(row - col);
+            antiSet.delete(row + col);
+        }
+
+    }
+    backtrack(board, 0, new Set(), new Set(), new Set())
+    return result;
+};
+
+let transforms = (board) => {
+    let trans = [];
+    for(let i = 0; i < board.length; i++){
+        trans.push(board[i].join(''))
+    }
+
+    return trans;
+}
