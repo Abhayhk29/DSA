@@ -83,3 +83,55 @@ var maxProfit = function(prices) {
 
     return ans;
 };
+
+/**
+ * @param {number[][]} intervals
+ * @param {number[]} newInterval
+ * @return {number[][]}
+ */
+var insert = function(intervals, newInterval) {
+    let result = [];
+    let n = intervals.length;
+    let i = 0;
+
+    // non overlapping 
+    while( i < n && intervals[i][1] < newInterval[0]){
+        result.push(intervals[i]);
+        i++;
+    }
+
+    while( i < n && intervals[i][0] <= newInterval[1]){
+        newInterval[0] = Math.min(intervals[i][0], newInterval[0] )
+        newInterval[1] = Math.max(intervals[i][1], newInterval[1] )
+        i++
+    }
+    result.push(newInterval);
+    while( i < n ){
+        result.push(intervals[i])
+        i++;
+    }
+
+    return result;
+};
+
+// O(n) : time
+// space : O(n) or O(1)
+
+/**
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+var merge = function(arr) {
+    arr.sort((a,b) => a[0] - b[0]);
+    let ans = [arr[0]];
+
+    for(let i = 1; i < arr.length; i++){
+        if(arr[i][0] <= ans[ans.length - 1][1]){
+            ans[ans.length - 1][1] = Math.max(ans[ans.length - 1][1], arr[i][1])
+        }else{
+            ans.push(arr[i])
+        }   
+    }
+
+    return ans;
+};
