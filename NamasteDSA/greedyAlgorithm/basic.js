@@ -135,3 +135,81 @@ var merge = function(arr) {
 
     return ans;
 };
+
+/**
+ * @param {string} s
+ * @return {number[]}
+ */
+var partitionLabels = function(s) {
+    let result = [];
+    let lastOccurance = {};
+
+    for(let i = 0; i < s.length; i++){
+        lastOccurance[s[i]] = i;
+    }
+
+    let start = end = 0;
+
+    for(let i = 0; i < s.length; i++){
+        end = Math.max(end, lastOccurance[s[i]]);
+        if(end === i){
+            result.push(end - start + 1);
+            start = i + 1;
+        }
+    }
+
+    return result;
+};
+
+// 763 last partitions
+
+/**
+ * @param {number[][]} intervals
+ * @return {number}
+ */
+var eraseOverlapIntervals = function(arr) {
+    arr.sort((a,b) => a[1] - b[1]);
+    let k = -Infinity;
+    let numberOfRemoval = 0;
+
+    for(let i = 0; i < arr.length; i++){
+        if(arr[i][0] < k){
+            numberOfRemoval++;
+        }else{
+            k = arr[i][1]
+        }
+    }
+
+    return numberOfRemoval;
+};
+
+// 435 Non Overlapping Intervals
+
+
+/**
+ * @param {character[]} tasks
+ * @param {number} n
+ * @return {number}
+ */
+var leastInterval = function(tasks, n) {
+    let freq= {};
+    let maxFreq = 0;
+    for(let i = 0; i < tasks.length; i++){
+        freq[tasks[i]] = freq[tasks[i]] ? freq[tasks[i]] + 1 : 1;
+        maxFreq = Math.max(maxFreq, freq[tasks[i]])
+    }
+
+    let countOfMaxFreq = 0;
+
+    for(let k in freq){
+        if(freq[k] === maxFreq){
+            ++countOfMaxFreq
+        }
+    }
+
+    let cycles = ((n + 1) * (maxFreq - 1)) + countOfMaxFreq;
+
+    return Math.max(cycles, tasks.length)
+};
+
+// 621v Task 
