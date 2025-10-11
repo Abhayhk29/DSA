@@ -213,3 +213,51 @@ var leastInterval = function(tasks, n) {
 };
 
 // 621v Task 
+
+/**
+ * @param {number[]} gas
+ * @param {number[]} cost
+ * @return {number}
+ */
+var canCompleteCircuit = function(gas, cost) {
+    let currGain = 0;
+    let totalGain = 0;
+    let ans = 0;
+
+    for(let i  = 0; i < gas.length; i++){
+        gain = gas[i] - cost[i];
+        currGain += gain;
+        totalGain += gain;
+        if(currGain < 0){
+            ans = i + 1;
+            currGain = 0;
+        }
+    }
+
+    return totalGain < 0 ? -1 : ans;
+};  
+
+/**
+ * @param {number[][]} trips
+ * @param {number} capacity
+ * @return {boolean}
+ */
+var carPooling = function(trips, capacity) {
+    let loc = Array(1001).fill(0);
+
+    for(let i = 0; i < trips.length; i++){
+        let [pass, from, to] = trips[i];
+        loc[from] += pass;
+        loc[to] -= pass;
+    }
+
+    let usedCapacity = 0;
+    for(let i = 0; i < 1001; i++){
+        usedCapacity = usedCapacity + loc[i];
+        if(usedCapacity > capacity){
+            return false;
+        }
+    }
+
+    return true;
+};
