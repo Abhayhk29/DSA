@@ -241,3 +241,237 @@ var coinChange = function(coins, amount) {
     return dp[amount] === Infinity ? -1 : dp[amount];
 };
 
+// 647. Palindromic Substrings using Recursion
+/**
+ * @param {string} s
+ * @return {number}
+ **/
+var countSubstrings = function(s) {
+    let n = s.length;
+    let count = 0;
+    let isPalindrome = (left, right) => {
+        if(left > right) return true;
+        if(s[left] !== s[right]) return false;
+        return isPalindrome(left + 1, right - 1);
+    }
+
+    for(let i = 0; i < n; i++){
+        for(let j = i; j < n; j++){
+            if(isPalindrome(i, j)){
+                count++;
+            }
+        }
+    }   
+    return count;
+}   
+
+
+// 647. Palindromic Substrings using DP - Memoization
+/**
+ * @param {string} s    
+ * 
+ * 
+ * @return {number}
+ * */
+var countSubstrings = function(s) {
+    let n = s.length;
+    let count = 0;
+    let dp = {};
+
+    let isPalindrome = (left, right) => {
+        if(left > right) return true;
+        if(s[left] !== s[right]) return false;  
+        let key = left + ',' + right;
+        if(!(key in dp)){
+            dp[key] = isPalindrome(left + 1, right - 1);
+        }
+        return dp[key];
+    }
+    for(let i = 0; i < n; i++){
+        for(let j = i; j < n; j++){
+            if(isPalindrome(i, j)){
+                count++;
+            }
+        }
+    }   
+    return count;
+}
+
+// using DP - Tabulation
+/**
+ * @param {string} s
+ *  
+ * * @return {number}
+ **/
+var countSubstrings = function(s) {
+    let n = s.length;
+    let count = 0;
+    let dp = Array.from({length: n}, () => Array(n).fill(false));
+    for(let length = 1; length <= n; length++){
+        for(let start = 0; start <= n - length; start++){
+            let end = start + length - 1;   
+            if(s[start] === s[end]){
+                if(length <= 2){
+                    dp[start][end] = true;
+                } else {
+                    dp[start][end] = dp[start + 1][end - 1];
+                }
+            } else {
+                dp[start][end] = false;
+            }
+            if(dp[start][end]){
+                count++;
+            }
+        }
+    }
+    return count;
+} 
+
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = function(s) {
+    let fn = (sr) => {
+        if(sr === '') return 1;
+        if(sr === '0') return 0;
+
+        let n = sr.length;
+        let oneDigit = sr.substring(n - 1)
+        let twoDigit = sr.substring(n - 2)
+
+        let ans = 0;
+
+        if(oneDigit != 0){
+            ans += fn(sr.substring(0, n - 1))
+        }
+
+        if(twoDigit >= 10 && twoDigit <= 26){
+            ans += fn(sr.substring(0, n - 2))
+        }
+
+        return ans;
+    }
+
+    return fn(s);
+};
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = function(s) {
+    let dp = {};
+    let fn = (sr) => {
+        if(sr === '') return 1;
+        if(sr === '0') return 0;
+
+        if(sr in dp) return dp[sr];
+
+        let n = sr.length;
+        let oneDigit = sr.substring(n - 1)
+        let twoDigit = sr.substring(n - 2)
+
+        let ans = 0;
+
+        if(oneDigit != 0){
+            ans += fn(sr.substring(0, n - 1))
+        }
+
+        if(twoDigit >= 10 && twoDigit <= 26){
+            ans += fn(sr.substring(0, n - 2))
+        }
+        dp[sr] = ans;
+        return ans;
+    }
+
+    return fn(s);
+};
+
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = function (s) {
+    let n = s.length;
+
+    let dp = Array(n + 1).fill(0);
+    dp[0] = 1;
+    dp[1] = s[0] === '0' ? 0 : 1;
+    for (let i = 2; i <= n; i++) {
+        let oneDigit = parseInt(s.substring(i - 1, i));
+        let twoDigit = parseInt(s.substring(i - 2, i));
+        if (oneDigit >= 1) {
+            dp[i] += dp[i - 1];
+        }
+        if (twoDigit >= 10 && twoDigit <= 26) {
+            dp[i] += dp[i - 2];
+        }
+    }
+    return dp[n];
+};
+
+
+function maximumSubArraySum(arr){
+    let n = arr.length;
+    let maxSoFar = arr[0];
+    let maxEndingHere = arr[0];
+    for(let i = 1; i < n; i++){
+        maxEndingHere = Math.max(arr[i], maxEndingHere + arr[i]);
+        maxSoFar = Math.max(maxSoFar, maxEndingHere);
+    }
+    return maxSoFar;
+}
+
+function maximumSubArraySum(arr){
+    let n = arr.length;
+    let maxSoFar = -Infinity;
+    for(let i = 0; i < n; i++){
+        let currentSum = 0;
+        for(let j = i; j < n; j++){
+            currentSum += arr[j];
+            maxSoFar = Math.max(maxSoFar, currentSum);
+        }   
+    }
+    return maxSoFar;
+}   
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    let currSum = nums[0];
+    let maxSum = nums[0];
+
+    for(let i = 1; i < nums.length; i++){
+        currSum = Math.max(currSum + nums[i], nums[i]);
+        maxSum = Math.max(maxSum, currSum);
+    }
+
+    return maxSum;
+   
+};
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = function(arr) {
+let n = arr.length;
+    let maxSoFar = -Infinity;
+    for(let i = 0; i < n; i++){
+        let currentSum = 1;
+        for(let j = i; j < n; j++){
+            currentSum *= arr[j];
+            maxSoFar = Math.max(maxSoFar, currentSum);
+        }   
+    }
+    return maxSoFar;
+};
