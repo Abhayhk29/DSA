@@ -475,3 +475,65 @@ let n = arr.length;
     }
     return maxSoFar;
 };
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = function(arr) {
+    let maxProdSoFar = arr[0];
+    let minProdSoFar = arr[0];
+    let totalMax = arr[0];
+
+    for(let i = 1; i < arr.length; i++){
+        let maxProdSoFarCopy = maxProdSoFar;
+        maxProdSoFar = Math.max(arr[i], maxProdSoFar * arr[i], minProdSoFar * arr[i]);
+        minProdSoFar = Math.min(arr[i], maxProdSoFarCopy * arr[i], minProdSoFar * arr[i]);
+        totalMax = Math.max(totalMax, maxProdSoFar);
+    }
+
+    return totalMax;
+};
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = function(arr) {
+    let n = arr.length;
+    let leftProd = rightProd = 1;
+    let finalMax = -Infinity;
+    for(let i = 0; i < n; i++){
+        leftProd = leftProd * arr[i];
+        rightProd = rightProd  * arr[n - i - 1];
+        finalMax= Math.max(finalMax, leftProd, rightProd);
+        if(leftProd === 0) leftProd = 1;
+        if(rightProd === 0 ) rightProd = 1
+    }
+
+    return finalMax
+};
+
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = function(s, wordDict) {
+    let fnc = (remStr) => {
+        if(remStr === ''){
+            return true;
+        }
+        let res = false;
+        for(let i = 0; i < remStr.length; i++){
+            let brStr = remStr.substr(0, i+1);
+            if(wordDict.includes(brStr) && fnc(remStr.substr(i+1))){
+                res = true;
+            }
+
+        }
+        return res;
+    }
+
+    return fnc(s);
+};
