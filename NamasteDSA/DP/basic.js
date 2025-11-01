@@ -896,3 +896,111 @@ var countSubstrings = function(s) {
     }
     return count;
 };
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var countSubstrings = function(s) {
+    // let n = s.length;
+    // let count = 0;
+    // let dp = {};
+    // let isPalidrome = (left, right) => {
+    //     if(left > right) return true;
+    //     if(s[left] !== s[right]) return false;
+    //     let key = left + ',' + right;
+    //     if(!(key in dp)){
+    //         dp[key] = isPalidrome(left + 1, right - 1);
+    //     }
+    //     return dp[key]
+    // }
+
+    // for(let i =0 ; i < n; i++){
+    //     for(let j = i; j < n; j++){
+    //         if(isPalidrome(i,j)){
+    //             count++;
+    //         }
+    //     }
+    // }
+    // return count;
+    let n = s.length;
+    let count = 0;
+
+    let isPalidrome = (left, right) => {
+        if(left > right) return true;
+        if(s[left] !== s[right]) return false;
+
+        return isPalidrome(left + 1, right - 1);
+    }
+
+    for(let i = 0; i< n; i++){
+        for(let j = i; j < n; j++){
+            if(isPalidrome(i,j)){
+                count++;
+            }
+        }
+    }
+
+    return count;
+};
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var countSubstrings = function(s) {
+    let n = s.length;
+    let dp = Array.from({length : n}, () => Array(n).fill(null));
+    let count = 0;
+    for (let i = 0; i < n; i++){
+        dp[i][i] = true;
+        ++count;
+        if( i < n - 1 && s[i] === s[i+1]){
+            dp[i][i+1] = true;
+            ++count;
+        }
+    }
+
+    for(let len = 3; len <= n; len++){
+        for(let i = 0; i <= n - len; i++){
+            let j = i + len - 1;
+            if(s[i] === s[j] && dp[i + 1][j - 1]){
+                dp[i][j] = true;
+                ++count;
+            }
+        }
+    }
+
+    return count;
+};
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    let n = s.length;
+    let dp = Array.from({length:n} , () => Array(n).fill(null));
+
+    let ans = [0,0]
+
+    for(let i = 0; i < n; i++){
+        dp[i][i] = true;
+        if(i < n - 1 && s[i] === s[i + 1]){
+            dp[i][i + 1] = true;
+            ans = [i, i + 1]
+        }
+    }
+
+    for(let len = 3; len <= n; len++){
+        for(let i = 0; i <= n - len; i++){
+            let j = i + len - 1;
+            if(s[i] === s[j] && dp[i + 1][j - 1]){
+                dp[i][j] = true;
+                ans = [i, j]
+            }
+        }
+    }
+
+    return s.substring(ans[0], ans[1] + 1);
+};
