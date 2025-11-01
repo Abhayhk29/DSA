@@ -537,3 +537,362 @@ var wordBreak = function(s, wordDict) {
 
     return fnc(s);
 };
+
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = function(s, wordDict) {
+    let dp = {}
+    let fnc = (remStr) => {
+        if(remStr === ''){
+            return true;
+        }
+
+        if(remStr in dp) return dp[remStr];
+        let res = false;
+        for(let i = 0; i < remStr.length; i++){
+            let brStr = remStr.substr(0, i+1);
+            if(wordDict.includes(brStr) && fnc(remStr.substr(i+1))){
+                res = true;
+            }
+
+        }
+        return dp[remStr] = res;
+    }
+
+    return fnc(s);
+};
+
+// bootom up approach
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ **/
+  
+var wordBreak = function(s, wordDict) {
+    let n = s.length;
+    let dp = Array(n + 1).fill(false);
+    dp[0] = true;
+    for(let i = 1; i <= n; i++){
+
+        for(let j = 0; j < i; j++){
+            let subStr = s.substring(j, i);
+            if(dp[j] && wordDict.includes(subStr)){
+                dp[i] = true;
+                break;
+            }
+        }
+    }
+
+    return dp[n];
+}
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function(nums) {
+    let n = nums.length;
+    let dp = Array(n).fill(1);
+    dp[0] = 1;
+    let lisLength = 1;
+    for(let i = 0; i < n; i++){
+        for(let j = 0; j < i; j++){
+            if(nums[j] < nums[i]){
+                dp[i] = Math.max(dp[i], dp[j] + 1);
+                lisLength = Math.max(lisLength, dp[i]);
+            }
+        }
+    }
+
+    return lisLength;
+};
+
+// top down approach with memoization
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ * */
+var lengthOfLIS = function(nums) {
+    let n = nums.length;
+    let store = {};
+    let fn = (currentIndex, prevIndex) => {
+        if(currentIndex === n){
+            return 0;
+        }
+        let key = currentIndex + ',' + prevIndex;
+        if(key in store){
+            return store[key];
+        }   
+        let taken = 0;
+        if(prevIndex === -1 || nums[currentIndex] > nums[prevIndex]){
+            taken = 1 + fn(currentIndex + 1, currentIndex);
+        }
+        let notTaken = fn(currentIndex + 1, prevIndex);
+        store[key] = Math.max(taken, notTaken);
+        return store[key];
+    }
+    return fn(0, -1);
+};
+
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    let sum = nums.reduce((acc, curr) => acc + curr, 0);
+
+    sum  = sum / 2;
+
+    let fn = (remS, start) => {
+        if(remS === 0) return true;
+        if(remS < 0) return false;
+        for(let i = start; i < nums.length; i++){
+            if(fn(remS - nums[i], i + 1)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    return fn(sum,0);
+};
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    let sum = nums.reduce((acc, curr) => acc + curr, 0);
+
+    sum  = sum / 2;
+    let dp = {};
+    let fn = (remS, start) => {
+        if(remS === 0) return true;
+        if(remS < 0) return false;
+
+        let key = start + '#' + remS;
+        if(key in dp) return dp[key]
+        for(let i = start; i < nums.length; i++){
+            if(fn(remS - nums[i], i + 1)){
+                return dp[key] = true;
+            }
+        }
+        return dp[key] = false;
+    }
+
+    return fn(sum,0);
+};
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    let sum = nums.reduce((acc, curr) => acc + curr, 0);
+    if(sum % 2) return false;
+    sum  = sum / 2;
+    let dp = Array.from({length : sum + 1}, () => Array(nums.length).fill(undefined));
+    let fn = (remS, start) => {
+        if(remS === 0) return true;
+        if(remS < 0) return false;
+
+        if(dp[remS][start]) return dp[remS][start]
+        for(let i = start; i < nums.length; i++){
+            if(fn(remS - nums[i], i + 1)){
+                return dp[remS][start] = true;
+            }
+        }
+        return dp[remS][start] = false;
+    }
+
+    return fn(sum,0);
+};
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    let sum = nums.reduce((acc, curr) => acc + curr, 0);
+    if(sum % 2) return false;
+    sum  = sum / 2;
+    let dp = Array.from({length : sum + 1}, () => Array(nums.length).fill(undefined));
+    let fn = (remS, start) => {
+        if(remS === 0) return true;
+        if(remS < 0) return false;
+
+        if(dp[remS][start] != undefined) return dp[remS][start]
+        for(let i = start; i < nums.length; i++){
+            if(fn(remS - nums[i], i + 1)){
+                return dp[remS][start] = true;
+            }
+        }
+        return dp[remS][start] = false;
+    }
+
+    return fn(sum,0);
+};
+
+/**
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+var change = function(amount, coins) {
+    let m = coins.length;
+
+    let fn = (remS, start) => {
+        if(remS === 0) return 1;
+        if(remS < 0) return 0;
+        let combination = 0;
+        for(let i = start ; i < m; i++){
+            combination += fn(remS - coins[i], i);
+        }
+
+        return combination;
+    }
+
+    return fn(amount, 0)
+};
+
+
+/**
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+var change = function(amount, coins) {
+    let m = coins.length;
+    let dp = {}
+    let fn = (remS, start) => {
+        if(remS === 0) return 1;
+        if(remS < 0) return 0;
+
+        let key = remS + "-" + start;
+        if(key in dp) return dp[key];
+        let combination = 0;
+        for(let i = start ; i < m; i++){
+            combination += fn(remS - coins[i], i);
+        }
+
+        return dp[key] = combination;
+    }
+
+    return fn(amount, 0)
+};
+
+/**
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+/**
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+var change = function(amount, coins) {
+    let m = coins.length;
+    let dp = Array.from({length : amount + 1}, () => Array(m).fill(-1));
+    let fn = (remS, start) => {
+        if(remS === 0) return 1;
+        if(remS < 0) return 0;
+
+        if(dp[remS][start] !== -1) return dp[remS][start]
+        let combination = 0;
+        for(let i = start ; i < m; i++){
+            combination += fn(remS - coins[i], i);
+        }
+
+        return dp[remS][start] = combination;
+    }
+
+    return fn(amount, 0)
+};
+
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function(m, n) {
+    let dp = Array.from({length : m + 1}, () => Array(n).fill(0));
+    let fn = (x,y) => {
+        if(x === 0 && y === 0) return 1;
+        if(x < 0 || y < 0) return 0;
+        return fn(x - 1, y) + fn(x, y - 1)
+    }
+
+    return fn(m - 1, n - 1)
+};
+
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function(m, n) {
+    let dp = Array.from({length : m}, () => Array(n).fill(0));
+    let fn = (x,y) => {
+        if(x === 0 && y === 0) return 1;
+        if(x < 0 || y < 0) return 0;
+        if(dp[x][y]) return dp[x][y]
+        return dp[x][y] = fn(x - 1, y) + fn(x, y - 1)
+    }
+
+    return fn(m - 1, n - 1)
+};
+
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function(m, n) {
+    let dp = Array.from({length : m}, () => Array(n).fill(-1));
+
+    for(let i = 0; i<m; i++) dp[i][0] = 1;
+    for(let i = 0; i<n; i++) dp[0][i] = 1;
+
+    for(let i =1; i < m; i++){
+        for(let j = 1; j < n; j++){
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1] 
+        }
+    }
+    return dp[m - 1][n - 1]
+};
+
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var countSubstrings = function(s) {
+    let n = s.length;
+    let count = 0;
+    let dp = {};
+    let isPalidrome = (left, right) => {
+        if(left > right) return true;
+        if(s[left] !== s[right]) return false;
+        let key = left + ',' + right;
+        if(!(key in dp)){
+            dp[key] = isPalidrome(left + 1, right - 1);
+        }
+        return dp[key]
+    }
+
+    for(let i =0 ; i < n; i++){
+        for(let j = i; j < n; j++){
+            if(isPalidrome(i,j)){
+                count++;
+            }
+        }
+    }
+    return count;
+};
