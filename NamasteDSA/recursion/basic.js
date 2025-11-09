@@ -52,3 +52,25 @@ let arr = [5,4,6,3,7,8,3,8,7];
 console.log(sumOfElementInArray(arr, arr.length - 1))
 console.log(sumOfElementInArrayOdd(arr, arr.length - 1))
 console.log(fact(5))
+
+// 279 perfect square
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numSquares = function(n) {
+    let solve = (rem) => {
+        if(rem === 0){
+            return 0;
+        }
+
+        let ans = rem;
+        for(let i = 1; i*i <= rem ; i++){
+            let temp = i*i;
+            ans = Math.min(ans, 1 + solve(rem - temp));
+        }
+        return ans;
+    }
+
+    return solve(n);
+};

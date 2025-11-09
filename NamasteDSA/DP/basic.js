@@ -1004,3 +1004,55 @@ var longestPalindrome = function(s) {
 
     return s.substring(ans[0], ans[1] + 1);
 };
+
+
+
+// leet code 279 perfect square
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numSquares = function(n) {
+    let dp = Array.from({length : n + 1 }).fill(-1)
+    // console.log(dp)
+    let solve = (rem) => {
+        if(rem === 0){
+            return 0;
+        }
+        if(dp[rem] != -1){
+            return dp[rem];
+        }
+
+        let ans = rem;
+        for(let i = 1; i*i <= rem ; i++){
+            let temp = i*i;
+            ans = Math.min(ans, 1 + solve(rem - temp));
+        }
+        return dp[rem] = ans;
+        
+    }
+
+    return solve(n);
+};
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numSquares = function(n) {
+
+    let dp = Array.from({length : n + 1 }).fill(Number.MAX_SAFE_INTEGER)
+
+    dp[0] = 0;
+
+    for(let i = 1 ; i <= n; i++){
+        for(j = 1; j*j <= i; j++){
+            let temp = j * j;
+            if( i - temp >= 0){
+                dp[i] = Math.min(dp[i], 1 + dp[i - temp]);
+            }
+        }
+    }
+
+    return dp[n]
+};
