@@ -187,3 +187,79 @@ var allPathsSourceTarget = function(graph) {
     dfs(0,[0])
     return ans;
 };
+
+
+function topologicalSort() {
+    const n = 6;
+    const adj = [
+        [],
+        [],
+        [3],
+        [1],
+        [0,1],
+        [0,2],
+    ]
+    let visited = new Set();
+    let ans = [];
+
+    const dfs = (curr) =>{
+        visited.add(curr);
+        for(let neigh of adj[curr]){
+            if(!visited.has(neigh)){
+                dfs(neigh);
+            }
+        }
+        ans.push(curr);
+    }
+
+    for(let i =0;i<n;i++){
+        if(!visited.has(i)){
+            dfs(i);
+        }
+    }   
+    
+    return ans.reverse();
+
+}
+
+function topologicalSortKahn() {
+    const n = 6;
+    const adj = [
+        [],
+        [],
+        [3],
+        [1],
+        [0,1],
+        [0,2],
+    ]
+
+    // create indegree array
+    for(let i =0;i<n;i++){
+        for(let neigh of adj[i]){
+            indegree[neigh]++;
+        }
+    }
+
+    let q = [];
+    let ans = [];
+
+    // push all 0 indegree nodes to queue
+    for(let i =0;i<n;i++){
+        if(indegree[i] === 0){
+            q.push(i);
+        }
+    }
+    
+    while(q.length){
+        let curr = q.shift();
+        ans.push(curr);
+        for(let neigh of adj[curr]){
+            indegree[neigh]--;
+            if(indegree[neigh] === 0){
+                q.push(neigh);
+            }
+        }
+    }
+
+    return ans;
+}
