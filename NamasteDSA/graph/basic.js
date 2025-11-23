@@ -233,6 +233,7 @@ function topologicalSortKahn() {
         [0,2],
     ]
 
+    let indegree = new Array(n).fill(0);
     // create indegree array
     for(let i =0;i<n;i++){
         for(let neigh of adj[i]){
@@ -249,7 +250,7 @@ function topologicalSortKahn() {
             q.push(i);
         }
     }
-    
+
     while(q.length){
         let curr = q.shift();
         ans.push(curr);
