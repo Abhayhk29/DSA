@@ -264,3 +264,69 @@ function topologicalSortKahn() {
 
     return ans;
 }
+
+
+const graph = [
+    [1,2],
+    [3],
+    [4],
+    [5],
+    [3],
+    []
+]
+
+
+function shortestDistance(graph,src){
+    let n = graph.length;
+    const dist = new Array(n).fill(Infinity);
+    dist[src] = 0;
+
+    let q = [src];
+
+    while(q.length){
+        let curr = q.shift();
+        for(let neigh of graph[curr]){
+            if(dist[neigh] == Infinity){
+                dist[neigh] = dist[curr] + 1;
+                q.push(neigh);
+            }   
+        }
+    }
+    return dist;
+}
+// time complexity is o(V + E) where v is number of vertices and e is number of edges
+// space complexity is o(V) for dist array and queue
+
+
+function shortestDistancePath(graph,src,dest){
+    let n = graph.length;
+    const dist = new Array(n).fill(Infinity);
+    const parent = new Array(n).fill(-1);
+    dist[src] = 0;
+    parent[src] = null;
+
+    let q = [src];
+    while(q.length){
+        let curr = q.shift();
+        for(let neigh of graph[curr]){
+            if(dist[neigh] == Infinity){
+                dist[neigh] = dist[curr] + 1;
+                parent[neigh] = curr;
+                q.push(neigh);
+            }
+        }
+    }
+    if(dist[dest] == Infinity){
+        return [];
+    }
+    let path = [];
+    let curr = dest;
+    while(curr != null){
+        path.push(curr);
+        curr = parent[curr];
+    }
+    path.reverse();
+    return path;
+}
+// time complexity is o(V + E) where v is number of vertices and e is number of edges
+// space complexity is o(V) for dist array , parent array and queue

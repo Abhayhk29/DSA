@@ -135,6 +135,18 @@ var missingNumber = function(nums) {
     }
 
     return totalSum - sum;
+
+     // let tempArr = new Array(nums.length + 1).fill(false);
+
+    // for(let num of nums){
+    //     tempArr[num] = true;
+    // }
+
+    // for(let i = 0; i < tempArr.length; i++){
+    //     if(!tempArr[i]){
+    //         return i;
+    //     }
+    // }
 };
 
 var singleNumber = function(nums) {
