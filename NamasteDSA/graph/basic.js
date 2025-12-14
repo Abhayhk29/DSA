@@ -294,6 +294,26 @@ function shortestDistance(graph,src){
     }
     return dist;
 }
+
+function shortestDistance2(graph, src){
+    let n = graph.length;
+    const dist = new Array(n).fill(Infinity);
+    dist[src] = 0;
+
+    let q = [src];
+
+    while (q.length) {
+        let curr = q.shift();
+        for (const neigh of graph[curr]) {
+            if(dist[neigh] == Infinity){
+                dist[neigh] = dist[curr] + 1;
+                q.push(neigh)
+            }
+        }
+    }
+
+    return dist;
+}
 // time complexity is o(V + E) where v is number of vertices and e is number of edges
 // space complexity is o(V) for dist array and queue
 
@@ -330,3 +350,20 @@ function shortestDistancePath(graph,src,dest){
 }
 // time complexity is o(V + E) where v is number of vertices and e is number of edges
 // space complexity is o(V) for dist array , parent array and queue
+
+// console.log(shortestDistancePath(graph,0,5));
+
+const graph2 = [
+    [[1,2], [2,4]], // [node ,weigh]
+    [[3,7],[2,1]],
+    [[4,3], [5,1]],
+    [[6,1]],
+    [[3,2],[6,5]],
+    [[3,3],[6,8]],
+    []
+]
+
+
+function dijkstras(graph,src){
+    
+}
