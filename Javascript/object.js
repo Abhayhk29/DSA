@@ -7,7 +7,7 @@ let user = {
     }
 }
 
-console.log(delete user.address.city)\
+console.log(delete user.address.city)
 
 
 let user2 = {
