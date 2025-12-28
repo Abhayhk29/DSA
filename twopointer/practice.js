@@ -379,3 +379,327 @@ var removeNthFromEnd = function(head, n) {
 
 
 
+
+// subromattic number means when we rotate it 180 it become similar
+// like 0 -> 0 1 - > 1 8 -> 8 , similarly 6 and 9 
+
+function subromatic(num){
+    let i = 0;
+    let j = num.length - 1;
+    let obj = {
+        '0':'0',
+        '1':'1',
+        '6' : '9',
+        '8': '8',
+        '9': '6'
+    }
+    while (i <= j) {
+        let s = num[i]
+        let e = num[j]
+
+        if(obj[s]){
+            if(obj[s] != e){
+                return false;
+            }else{
+                i++;
+                j--;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    return true;
+}
+
+console.log(subromatic('19261'))
+
+// time O(n) s : O(1)
+
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {number}
+ */
+var appendCharacters = function(s, t) {
+    let i = 0;
+    let j = 0;
+
+    for( k = 0; k <= s.length - 1 ; k++){
+        if(s[i] === t[j] ){
+            j++;
+        }
+        i++;
+    }
+
+    return t.length - j;
+};
+
+// 2486. Append Characters to String to Make Subsequence
+// t : o(m + n)
+// s : o(1)
+
+
+
+
+// reverse words in a string 151 leetcode
+
+// t : O(n)
+// s : O(n)
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function(s) {
+    s = s.trim();
+
+    let newArr = s.split(/\s+/);
+    let result = [];
+
+    for(let i = newArr.length - 1; i >= 0; i--){
+        result.push(newArr[i]);
+    }
+    return result.join(' ')
+};
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function(s) {
+  let words = s.split(" ").filter(word => word !== '');
+    let left = 0;
+    let right = words.length - 1;
+
+    while(left < right){
+        [words[left], words[right]] = [words[right], words[left]];
+        left++;
+        right--
+    }
+
+    return words.join(' ')
+
+};
+
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function(s) {
+   let str = [...s]
+    let i = 0;
+    for(let k = 0; k <= str.length - 1; k++){
+        if(str[k] === ' ' || k === str.length - 1){
+            let end = (k === str.length - 1 && str[k] !== '') ? k + 1 : k
+            while(i < end){
+                [str[i], str[end - 1]] = [str[end - 1], str[i]];
+                i++;
+                end--;
+            }
+            i = k + 1;
+        }
+    }
+
+   return str.join('')
+};
+
+
+
+// 202. Happy Number
+// t : o(logn)
+// space : o(1)
+
+/**
+ * @param {number} n
+ * @return {boolean}
+ */
+var isHappy = function(n) {
+    function square(num){
+        let sum = 0;
+        while(num> 0){
+            let mod = num % 10;
+            sum += (mod * mod)
+            num = Math.floor(num / 10)
+        }
+        return sum;
+    }
+
+    let slow = n;
+    let fast = n;
+
+    while(fast != 1){
+        slow = square(slow);
+        fast = square(square(fast));
+
+        if(fast === 1){
+            return true;
+        }
+
+
+        if(fast === slow){
+            return false;
+        }
+    }
+
+    return true;
+};
+
+
+// 876 middle of the link list
+// t : o(n)
+// s : o(1)
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var middleNode = function(head) {
+    let slow = head;
+    let fast = head;
+
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next
+    }
+
+    return slow
+};
+
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+// 141 leetcode 
+// sp : 0(1)
+//  t : O(n)
+
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function(head) {
+    let slow = head;
+    let fast = head;
+
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast = fast.next.next;
+        if(slow === fast){
+            return true;
+        }
+    }
+
+    return false;
+};
+
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+// 142. Linked List Cycle II
+// t : o(n)
+// s : O(1)
+
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var detectCycle = function(head) {
+    let slow = head;
+    let fast = head;
+
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next;
+
+        if(fast === slow){
+            break;
+        }
+    }
+
+    if(fast == null || fast.next === null){
+        return null;
+    }
+
+    let n1 = slow;
+    let n2 = head
+
+    while(n1 != n2){
+        n1 = n1.next;
+        n2 = n2.next;
+    }
+
+    return n2;
+};
+
+// if we want to find the length of the cycle
+
+
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var detectCycle = function(head) {
+    let slow = head;
+    let fast = head;
+
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next;
+
+        if(fast === slow){
+            break;
+        }
+    }
+
+    if(fast == null || fast.next === null){
+        return null;
+    }
+
+    let n1 = slow;
+    let n2 = head
+
+    while(n1 != n2){
+        n1 = n1.next;
+        n2 = n2.next;
+    }
+
+    let curr = n1.next;
+    let len = 1;
+
+    while(curr != n1){
+        len+= 1;
+        curr.curr.next;
+    }
+    console.log(len)
+
+    return n2;
+};
+
+
