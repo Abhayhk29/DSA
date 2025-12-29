@@ -703,3 +703,137 @@ var detectCycle = function(head) {
 };
 
 
+
+/**
+ * @param {Node} node
+ */
+
+/*
+class Node{
+    constructor(data){
+        this.data = data;
+        this.next = null;
+    }
+}
+*/
+
+// https://www.geeksforgeeks.org/problems/split-a-circular-linked-list-into-two-halves/1
+// t : O(n)
+// s : O(1)
+class Solution {
+    splitList(head) {
+        // code here
+        let slow = head;
+        let fast = head.next;
+        
+        while(fast != head && fast.next != head){
+            slow = slow.next;
+            fast = fast.next;
+            
+            if(fast.next != head){
+                fast = fast.next;
+            }
+        }
+        
+        fast.next = slow.next;
+        
+        slow.next = head;
+        
+        return [head, fast.next]
+        
+        
+    }
+}
+
+
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+// URL : https://leetcode.com/problems/find-the-duplicate-number/submissions/1867709113/
+// ti : o(n)
+// s : O(n) because of set
+var findDuplicate = function(nums) {
+    let newMap = new Map();
+
+    for(let i = 0; i <= nums.length - 1; i++){
+        if(newMap.has(nums[i])){
+            return nums[i];
+        }
+        newMap.set(nums[i]);
+    }
+};
+
+// t O(n)
+//  s : O(1)
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findDuplicate = function(nums) {
+   let slow = 0;
+   let fast = 0;
+
+
+   do {
+    slow = nums[slow];
+    fast = nums[nums[fast]];
+
+    if(slow === fast){
+        break;
+    }
+   } while (slow != fast)
+
+   let n1 = 0;
+   let n2 = slow;
+
+   while(n1 != n2){
+    n1 = nums[n1]
+    n2 = nums[n2]
+   }
+
+
+   return n1;
+};
+
+
+// https://leetcode.com/problems/palindrome-linked-list/submissions/1867727434/
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+// t : O(n)
+// s : O(n)
+var isPalindrome = function(head) {
+    let tempArr = [];
+
+    while(head){
+        tempArr.push(head.val);
+        head = head.next;
+    }
+
+    let i = 0;
+    let j = tempArr.length - 1;
+    console.log(tempArr);
+    while(i < j){
+        if(tempArr[i] == tempArr[j]){
+            i  = i + 1;
+            j = j - 1;
+        }else{
+            return false;
+        }
+    }
+
+    return true;
+};
