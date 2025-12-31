@@ -837,3 +837,104 @@ var isPalindrome = function(head) {
 
     return true;
 };
+
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var isPalindrome = function(head) {
+    const reverseList = (curr) => {
+        let prev = null;
+
+        while(curr){
+            let next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+    let slow = head;
+    let fast = head;
+
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    let p2 = reverseList(slow);
+    let p1 = head;
+
+    while(p1 && p2){
+        if(p1.val != p2.val){
+            return false;
+        }
+        p1 = p1.next;
+        p2 = p2.next;
+    }
+
+    return true;
+};
+
+// https://leetcode.com/problems/maximum-twin-sum-of-a-linked-list/description/
+
+// 2130. Maximum Twin Sum of a Linked List
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {number}
+ */
+var pairSum = function(head) {
+
+    const reverseList = (curr) => {
+        let prev = null;
+
+        while(curr){
+            let next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+    let slow = head;
+    let fast = head;
+
+
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    
+    let p2 = reverseList(slow);
+    let p1 = head;
+
+    let max = 0
+     while(p1 && p2){
+        max = Math.max(max, p1.val + p2.val )
+        p1 = p1.next;
+        p2 = p2.next;
+    }
+    
+    return max
+};
+
+
