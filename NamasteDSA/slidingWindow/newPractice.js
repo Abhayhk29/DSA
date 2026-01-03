@@ -206,3 +206,226 @@ var minSubArrayLen = function(target, nums) {
 
     return size === Infinity ? 0 : size;
 };
+
+
+// https://leetcode.com/problems/contains-duplicate-ii/
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+
+// time = 0(n^2)
+// s : o(n)
+
+var containsNearbyDuplicate = function(nums, k) {
+    for(let i = 0; i < nums.length; i++){
+        let mySet = new Set();
+        for(let j = i; j <= Math.min(i + k, nums.length - 1); j++){
+            if(mySet.has(nums[j])){
+                return true;
+            }
+
+            mySet.add(nums[j]);
+        }
+    }
+
+    return false;
+};
+
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+
+// time = o(n)
+// s : O(n)
+var containsNearbyDuplicate = function(nums, k) {
+
+    
+    let mySet = new Set();
+    for(let i = 0; i < Math.min(k,nums.length); i++){
+        if(mySet.has(nums[i])){
+            return true;
+        }
+
+        mySet.add(nums[i]);
+    }
+
+    for(let j = k; j < nums.length; j++){
+        if(mySet.has(nums[j])){
+            return true;
+        }
+        mySet.add(nums[j]);
+        mySet.delete(nums[j - k])
+
+    }
+
+
+    return false;
+};
+
+
+// https://leetcode.com/problems/maximum-average-subarray-i/submissions/1872999172/
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+
+// t : o(n)
+// s : o(1)
+var findMaxAverage = function(nums, k) {
+      let max = 0;
+    let avg = -Infinity;
+    for(let i = 0; i <= Math.min(k - 1, nums.length); i++){
+        max += nums[i];
+    }
+    avg = Math.max(max / k, avg)
+    for(let j = k; j < nums.length; j++){
+        max = max - nums[j - k];
+        max += nums[j]
+        avg = Math.max(max / k, avg)        
+    }
+
+
+    return avg;
+};
+
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+
+// https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+// t : O(n^2)
+// s : O(n)
+var lengthOfLongestSubstring = function(s) {
+    let max = 0;
+
+    for(let i = 0; i < s.length; i++){
+        let mySet = new Set();
+        for(let j = i; j < s.length; j++){
+            if(mySet.has(s[j])){
+                break;
+            }
+
+            mySet.add(s[j]);
+            max = Math.max(max, j - i + 1);
+        }
+    }
+
+    return max
+};
+
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+
+// t : o(n)
+// s : o(n)
+var lengthOfLongestSubstring = function(s) {
+    let max = 0;
+
+    let i =0;
+    let j = 0;
+      let mySet = new Set();
+
+
+    while(j < s.length){
+        while(mySet.has(s[j])){
+            mySet.delete(s[i]);
+            i = i + 1;
+        }
+
+        mySet.add(s[j]);
+        max = Math.max(max,j - i + 1);
+        j = j + 1;
+    }
+    return max
+};
+
+
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+
+// t : O(n - d)d
+// s : O(n - d)d
+var findRepeatedDnaSequences = function(s) {
+    
+    let mySet = new Set(); 
+    let myResultSet = new Set(); 
+    let str = '';
+
+
+
+    for(let i = 0; i <= s.length - 10; i++){
+        let mySeq = s.substr(i, 10)
+        if(mySet.has(mySeq)){
+            myResultSet.add(mySeq);
+        }
+
+         mySet.add(mySeq)
+    }
+     console.log(myResultSet)
+    return [...myResultSet]
+};
+
+// rabin karp and rolling hash
+
+var findRepeatedDnaSequences = function(s) {
+    if (s.length < 10) return [];
+
+    const L = 10;
+    const base = 4;
+    // Math.pow(4, 9) is the weight of the leftmost digit in a 10-char sequence
+    const hiWeight = Math.pow(base, L - 1); 
+    
+    const charMap = { 'A': 0, 'C': 1, 'G': 2, 'T': 3 };
+    const nums = Array.from(s).map(c => charMap[c]);
+
+    let seenHashes = new Set();
+    let result = new Set();
+    let rollingHash = 0;
+
+    // 1. Calculate hash for the first window
+    for (let i = 0; i < L; i++) {
+        rollingHash = rollingHash * base + nums[i];
+    }
+    seenHashes.add(rollingHash);
+
+    // 2. Rolling Hash for the rest of the string
+    for (let i = 1; i <= s.length - L; i++) {
+        // Remove leftmost char, shift left, add rightmost char
+        const prevCharVal = nums[i - 1];
+        const nextCharVal = nums[i + L - 1];
+        
+        rollingHash = (rollingHash - prevCharVal * hiWeight) * base + nextCharVal;
+
+        if (seenHashes.has(rollingHash)) {
+            result.add(s.substring(i, i + L));
+        } else {
+            seenHashes.add(rollingHash);
+        }
+    }
+
+    return [...result];
+};
