@@ -144,3 +144,65 @@ var maximumSubarraySum = function(nums, k) {
    return max;
 
 };
+
+// https://leetcode.com/problems/minimum-size-subarray-sum/
+// 209
+
+// time : O(n^2)
+// O (1)
+
+/**
+ * @param {number} target
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minSubArrayLen = function(target, nums) {
+    let sum = 0;
+    let size = Infinity;
+
+
+    for(let i = 0; i < nums.length ; i++){
+        let sum = 0;
+        for(j  = i ; j < nums.length; j++){
+            sum += nums[j];
+
+            if(sum >= target){
+                size = Math.min(size,j - i + 1);
+                break;
+            }
+        }
+    }
+
+    return size === Infinity ? 0 : size;
+};
+
+
+/**
+ * @param {number} target
+ * @param {number[]} nums
+ * @return {number}
+ */
+
+//  time : O(n)
+// O (1)
+
+var minSubArrayLen = function(target, nums) {
+    let sum = 0;
+    let size = Infinity;
+
+    let i = 0;
+    let j = 0;
+    while(j < nums.length){
+        sum += nums[j];
+
+        while(sum >= target){
+            size = Math.min(size, j - i + 1);
+            sum -= nums[i]
+            i += 1;
+        }
+
+        j += 1;
+    }
+
+    return size === Infinity ? 0 : size;
+};
